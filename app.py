@@ -68,7 +68,7 @@ def login():
 
     if check_password_hash(user.password, password):
         # Token have 15 minutes validity to access
-        expires = datetime.timedelta(minutes=1)
+        expires = datetime.timedelta(minutes=15)
         access_token = create_access_token(username, expires_delta=expires)
         return jsonify(token=access_token), 200
 
