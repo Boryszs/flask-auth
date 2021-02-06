@@ -10,7 +10,7 @@ import datetime
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:123@localhost:5432/User"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = 'secret'
+app.config['JWT_SECRET_KEY'] = 'secret_JWT_key'
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -29,8 +29,18 @@ class User(db.Model):
         self.username = username
         self.password = password
 
-    def verify_password(self, password):
-        return check_password_hash(self.password, password)
+    def __str__():
+        return self.id + " " + self.username + " " + self.password
+
+    def __repr__():
+        return self.id + " " + self.username + " " + self.password
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "password": self.password
+        }
 
 
 # Expired access token
@@ -47,49 +57,43 @@ def my_expired_token_callback(expired_token):
 @app.route('/login', methods=['POST'])
 def login():
     if not request.is_json:
-        return jsonify({"message": "Missing JSON in request"}), 400
+        return make_response(jsonify({'message': 'JSON error'}), 400)
 
-    username = request.json.get('username', None)
-    password = request.json.get('password', None)
-    if not username:
-        return jsonify({"message": "Missing username"}), 400
-    if not password:
-        return jsonify({"message": "Missing password"}), 400
+    username = request.json.get('username')
+    password = request.json.get('password')
+    if not username or not password:
+        return make_response(jsonify({'message': 'Missing parameters'}), 400)
 
     user = User.query.filter_by(username=username).first()
 
-    if user is None:
-        return jsonify({"message": "Bad username or password"}), 401
-
-    if user.verify_password(password):
+    if check_password_hash(user.password, password):
         # Token have 15 minutes validity to access
-        expires = datetime.timedelta(minutes=15)
+        expires = datetime.timedelta(minutes=1)
         access_token = create_access_token(username, expires_delta=expires)
         return jsonify(token=access_token), 200
 
-    return jsonify({"message": "Bad password"}), 401
+    return make_response(jsonify({'message': 'Wrong password'}), 401)
 
 
 # Register witch username and password
 @app.route('/register', methods=['POST'])
 def register():
     if not request.is_json:
-        return jsonify({"message": "Missing JSON in request"}), 400
+        return make_response(jsonify({'message': 'JSON error'}), 400)
 
-    username = request.json.get('username', None)
-    password = request.json.get('password', None)
+    username = request.json.get('username')
+    password = request.json.get('password')
 
-    if not username:
-        return jsonify({"message": "Missing username"}), 400
-    if not password:
-        return jsonify({"message": "Missing password"}), 400
+    if not username or not password:
+        return make_response(jsonify({'message': 'Missing parameters'}), 400)
+
     if User.query.filter_by(username=username).first() is not None:
-        return jsonify({"message": "User exist !!!"}), 400
+        return make_response(jsonify({'message': 'User exist !!!'}), 400)
 
     new_user = User(username, generate_password_hash(password))
     db.session.add(new_user)
     db.session.commit()
-    return jsonify({"message": "Succes add user"}), 201
+    return make_response(jsonify({'message': 'Succes add user'}), 201)
 
 
 # Endpoint protected access token
@@ -97,13 +101,13 @@ def register():
 @jwt_required
 def protected():
     current_user = get_jwt_identity()
-    return jsonify(user_name=current_user), 200
+    return make_response(jsonify({'message': 'JWT is Work ;)'}), 200)
 
 
 # Endpoint to check whether server is run
 @app.route('/', methods=['GET'])
 def hello():
-    return jsonify("Hello World"), 200
+    return make_response(jsonify("Hello World"), 200)
 
 
 if __name__ == '__main__':

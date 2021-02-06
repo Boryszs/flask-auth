@@ -50,7 +50,7 @@ python3 app.py or flask run
 return "Hello World"
 
 
-![Zrzut ekranu z 2021-02-06 06-59-19](https://user-images.githubusercontent.com/62262900/107110645-c9a70680-6849-11eb-9e78-ac894a692934.png)
+![Zrzut ekranu z 2021-02-06 06-59-19](https://user-images.githubusercontent.com/62262900/107112173-d29dd500-6855-11eb-9e7d-429ca49d6c62.png)
 
 
 #### POST http://127.0.0.1:5000/register
@@ -67,7 +67,7 @@ return "Hello World"
 "password":"password"
 ```
 
-![Zrzut ekranu z 2021-02-06 06-58-43](https://user-images.githubusercontent.com/62262900/107110656-f3f8c400-6849-11eb-914d-f13dbe6be73e.png)
+![Zrzut ekranu z 2021-02-06 06-58-43](https://user-images.githubusercontent.com/62262900/107112187-f3662a80-6855-11eb-92e9-4780ae8f383f.png)
 
 
 #### POST http://127.0.0.1:5000/protected
@@ -80,8 +80,8 @@ return "Hello World"
 
 Successful access
 
-![Zrzut ekranu z 2021-02-06 06-58-12](https://user-images.githubusercontent.com/62262900/107110662-0d9a0b80-684a-11eb-8cf7-881de8d06324.png)
+![Zrzut ekranu z 2021-02-06 08-34-50](https://user-images.githubusercontent.com/62262900/107112247-72f3f980-6856-11eb-87ca-046704028b6d.png)
 
-Without access message
+Without access message when token will expire
 
-![Zrzut ekranu z 2021-02-06 07-02-55](https://user-images.githubusercontent.com/62262900/107110665-1f7bae80-684a-11eb-95ec-1f321d12869c.png)
+![Zrzut ekranu z 2021-02-06 07-02-55](https://user-images.githubusercontent.com/62262900/107112307-fada0380-6856-11eb-87cb-212807ecaba7.png)
