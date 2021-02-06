@@ -1,0 +1,7 @@
+Flask-JWT-Extended
+Flask
+Flask-SQLAlchemy
+Flask-Migrate
+Werkzeug
+Flask-Migrate
+psycopg2-binary
